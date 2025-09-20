@@ -303,6 +303,17 @@
         return known;
     })();
 
+    function safeCreateIcons(context = 'renderização padrão') {
+        if (window.lucide?.createIcons) {
+            try {
+                window.lucide.createIcons();
+            } catch (error) {
+                console.warn(`Não foi possível renderizar os ícones do Lucide (${context}).`, error);
+            }
+        } else {
+            console.warn(`Biblioteca Lucide indisponível; ícones não serão renderizados (${context}).`);
+        }
+    }
 
     // --- INICIALIZAÇÃO ---
     document.addEventListener('DOMContentLoaded', () => {
@@ -921,7 +932,7 @@
         document.documentElement.classList.toggle('dark', theme === 'dark');
         const iconName = theme === 'dark' ? 'sun' : 'moon';
         themeToggleBtn.innerHTML = `<i data-lucide="${iconName}" class="h-5 w-5"></i>`;
-        lucide.createIcons();
+        safeCreateIcons('atualização do tema');
     }
     
     function toggleTheme() {
@@ -1152,7 +1163,7 @@
                 </div>
             </div>
         `;
-        lucide.createIcons();
+        safeCreateIcons('conteúdo do modal de detalhes');
     }
   })();
   </script>
